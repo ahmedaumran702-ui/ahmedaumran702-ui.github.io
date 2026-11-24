@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.instinct.appstore",
+      "sha256_cert_fingerprints": ["E1:97:D2:C8:1A:5E:E4:2A:A6:E2:55:53:5C:8D:CD:AA:31:49:42:7D:3A:D0:64:8D:31:00:93:D4:57:61:92:B8"]
+    }
+  }
+]
