@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>متجر App Studio</title></head>
+<body style="font-family:sans-serif;max-width:32em;margin:2em auto;padding:0 1em">
+<h1>متجر App Studio</h1>
+<div id="box"><p>جاري التحميل...</p></div>
+<script>
+(function(){
+var U="https://bdfxyuvpdolhfamdivxr.supabase.co",K="sb_publishable_sYlFjIHLU4m0aysWxy8ZUQ_VrwyhFu1";
+var box=document.getElementById("box");
+function msg(t){box.textContent="";var p=document.createElement("p");p.textContent=t;box.appendChild(p);}
+var m=location.pathname.match(/^\/a\/([0-9a-fA-F-]{36})\/?$/);
+if(!m){msg("رابط غير صالح.");return;}
+var id=m[1].toLowerCase();
+fetch(U+"/rest/v1/apps?select=name,description,size_bytes,version_name,file_path&id=eq."+encodeURIComponent(id),{headers:{apikey:K}})
+.then(function(r){if(!r.ok)throw 0;return r.json();})
+.then(function(a){
+ if(!a.length){msg("التطبيق ده مش موجود في المتجر (يمكن اتحذف أو الرابط غلط).");return;}
+ var o=a[0];box.textContent="";
+ var h=document.createElement("h2");h.textContent=o.name||"";box.appendChild(h);
+ if(o.description){var d=document.createElement("p");d.textContent=o.description;box.appendChild(d);}
+ var i=document.createElement("p");var parts=[];
+ if(o.version_name)parts.push("الإصدار "+o.version_name);
+ if(o.size_bytes)parts.push((o.size_bytes/1048576).toFixed(1)+" ميجابايت");
+ i.textContent=parts.join(" . ");box.appendChild(i);
+ var l=document.createElement("a");l.textContent="تنزيل ملف التطبيق (APK)";
+ var fp=o.file_path||"";
+ if(fp.indexOf("ghp:")===0){var q=fp.split(":");var R="https://github.com/ahmedaumran702-ui/appstudio-store-apps/releases/download/"+encodeURIComponent(q[1])+"/";
+  if(q[2]==="1"){l.href=R+"part-0001";}else{l.textContent="الملف كبير ومقسّم. نزّله من متجر App Studio";l.removeAttribute("href");}}
+ else l.href=U+"/storage/v1/object/public/apps/"+fp.split("/").map(encodeURIComponent).join("/");
+ box.appendChild(l);
+ var n=document.createElement("p");n.textContent="التثبيت من ملف APK يحتاج السماح بالتثبيت من المتصفح على جوالك. للتحديثات والتقييم استخدم متجر App Studio.";box.appendChild(n);
+}).catch(function(){msg("تعذر تحميل بيانات التطبيق الآن. جرّب بعد شوية.");});
+})();
+</script></body></html>
