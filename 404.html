@@ -12,7 +12,7 @@ function msg(t){box.textContent="";var p=document.createElement("p");p.textConte
 var m=location.pathname.match(/^\/a\/([0-9a-fA-F-]{36})\/?$/);
 if(!m){msg("رابط غير صالح.");return;}
 var id=m[1].toLowerCase();
-fetch(U+"/rest/v1/apps?select=name,description,size_bytes,version_name,file_path&id=eq."+encodeURIComponent(id),{headers:{apikey:K}})
+fetch(U+"/rest/v1/apps?select=name,description,size_bytes,version_name,file_path,gh_path&id=eq."+encodeURIComponent(id),{headers:{apikey:K}})
 .then(function(r){if(!r.ok)throw 0;return r.json();})
 .then(function(a){
  if(!a.length){msg("التطبيق ده مش موجود في المتجر (يمكن اتحذف أو الرابط غلط).");return;}
@@ -24,7 +24,7 @@ fetch(U+"/rest/v1/apps?select=name,description,size_bytes,version_name,file_path
  if(o.size_bytes)parts.push((o.size_bytes/1048576).toFixed(1)+" ميجابايت");
  i.textContent=parts.join(" . ");box.appendChild(i);
  var l=document.createElement("a");l.textContent="تنزيل ملف التطبيق (APK)";
- var fp=o.file_path||"";
+ var fp=(o.gh_path&&o.gh_path.indexOf("ghp:")===0)?o.gh_path:(o.file_path||"");
  if(fp.indexOf("ghp:")===0){var q=fp.split(":");var R="https://github.com/ahmedaumran702-ui/appstudio-store-apps/releases/download/"+encodeURIComponent(q[1])+"/";
   if(q[2]==="1"){l.href=R+"part-0001";}else{l.textContent="الملف كبير ومقسّم. نزّله من متجر App Studio";l.removeAttribute("href");}}
  else l.href=U+"/storage/v1/object/public/apps/"+fp.split("/").map(encodeURIComponent).join("/");
